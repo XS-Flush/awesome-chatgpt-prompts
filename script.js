@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Search functionality
 async function initializeSearch() {
   try {
-    const response = await fetch("/prompts.csv");
+    const response = await fetch(site_baseurl + '/prompts.csv');
     const csvText = await response.text();
     const prompts = parseCSV(csvText);
 
