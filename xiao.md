@@ -166,3 +166,92 @@ git push
 我相信 99% 的可能性是第一种情况（忘记提交推送）。但如果推送后问题依然存在，请检查一下你的 CI/CD 配置中是否有**缓存（Cache）机制**。
 
 有时候 CI 会缓存 `vendor/bundle` 目录或者 gem 文件来加速构建。在这种情况下，你可能需要**手动清除一下 CI 的缓存**，然后再重新运行。例如，在 GitHub Actions 中，你可以在 Actions 标签页的管理界面找到清除缓存的选项。
+
+
+太好了！这是一个全新的、完全不同的错误，这说明你已经成功解决了之前 `Gemfile.lock` 文件损坏的问题。我们离成功只有一步之遥了！
+
+这个新错误是一个非常经典的 **“平台不匹配 (Platform Mismatch)”** 问题。
+
+### 问题诊断
+
+我们来看一下错误日志的核心信息：
+
+```
+Your bundle only supports platforms ["x64-mingw-ucrt"] but your local platform
+is x86_64-linux. Add the current platform to the lockfile with
+`bundle lock --add-platform x86_64-linux` and try again.
+```
+
+*   **`Your bundle only supports platforms ["x64-mingw-ucrt"]`**: 这句话的意思是，你当前的 `Gemfile.lock` 文件里，`PLATFORMS` 区域只记录了一个平台：`x64-mingw-ucrt`。这是 **Windows** 平台的标识符。
+*   **`but your local platform is x86_64-linux`**: 但是，你的 CI/CD 环境（GitHub Actions 的服务器）是一个 **Linux** 系统，它的平台标识符是 `x86_64-linux`。
+*   **`Add the current platform to the lockfile with ...`**: Bundler 非常友好地直接告诉了你解决方案。
+
+### 根本原因
+
+这个错误发生的原因是：
+
+1.  你在你的 **Windows 电脑**上运行了 `bundle install` 或 `bundle update`。
+2.  Bundler 在生成 `Gemfile.lock` 时，记录了你当前的操作系统平台 (Windows)。
+3.  当你把这个只记录了 Windows 平台的锁文件推送到 GitHub 后，CI 在一个 Linux 服务器上运行 `bundle install`。
+4.  Linux 上的 Bundler 检查 `Gemfile.lock`，发现里面根本没有为 Linux 平台锁定任何 gem 版本，于是它出于安全考虑，拒绝继续执行，并提示你添加当前平台。
+
+这对于一些需要编译C扩展的 gem (比如你项目中的 `nokogiri` 和 `ffi`) 尤其重要，因为它们在不同操作系统上的版本或编译方式可能完全不同。
+
+### 解决方案
+
+正如错误提示所说，你需要在你的 `Gemfile.lock` 中添加对 Linux 平台的支持。
+
+**请在你的本地 Windows 电脑上**，打开终端，进入项目目录，然后执行以下操作。
+
+---
+
+#### 方法一：精确修复（只添加 CI 需要的平台）
+
+1.  **运行 Bundler 提供的命令**：
+    这个命令**不会**安装任何东西，它只是安全地更新你的 `Gemfile.lock` 文件，把 Linux 平台的信息加进去。
+    ```bash
+    bundle lock --add-platform x86_64-linux
+    ```
+
+2.  **检查 `Gemfile.lock`**：
+    执行完后，你可以打开 `Gemfile.lock` 文件，滚动到最底部。你会看到 `PLATFORMS` 区域现在包含了两个平台：
+    ```
+    PLATFORMS
+      x64-mingw-ucrt
+      x86_64-linux
+    ```
+
+3.  **提交并推送修复**：
+    ```bash
+    git add Gemfile.lock
+    git commit -m "feat: Add linux platform to lockfile for CI"
+    git push
+    ```
+
+---
+
+#### 方法二：更稳健的长期方案（推荐）
+
+如果你的团队里有 Mac 用户，或者你希望项目有更好的移植性，可以一次性把所有常见的平台都加上。
+
+1.  **逐一添加常见平台**：
+    ```bash
+    # 添加标准 Linux (CI/CD 环境和大多数服务器)
+    bundle lock --add-platform x86_64-linux
+
+    # 添加 Apple Silicon Mac (M1/M2/M3)
+    bundle lock --add-platform arm64-darwin
+
+    # 添加 Intel Mac
+    bundle lock --add-platform x86_64-darwin
+    ```
+    *（你的 Windows 平台 `x64-mingw-ucrt` 应该已经存在了）*
+
+2.  **提交并推送**：
+    ```bash
+    git add Gemfile.lock
+    git commit -m "build: Add support for Linux and macOS platforms"
+    git push
+    ```
+
+完成推送后，你的 GitHub Actions 就能顺利通过 `bundle install` 这一步了。这个错误就会彻底解决。
