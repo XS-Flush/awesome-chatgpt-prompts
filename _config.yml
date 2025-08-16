@@ -6,3 +6,6 @@ github_pages:
   baseurl: "/awesome-chatgpt-prompts"
   url: "https://xs-flush.github.io"
   branch: "main"
+
+baseurl: "/awesome-chatgpt-prompts"
+url: "https://xs-flush.github.io"
