@@ -421,7 +421,7 @@ function filterPrompts() {
   const searchTerm = searchInput.value.toLowerCase();
 
   // Re-fetch and filter prompts
-  fetch("/prompts.csv")
+  fetch(site_baseurl + '/prompts.csv')
     .then((response) => response.text())
     .then((csvText) => {
       const prompts = parseCSV(csvText);
@@ -507,7 +507,7 @@ function createPromptCards() {
   promptsGrid.appendChild(contributeCard);
 
   // Fetch prompts.csv to get for_devs information
-  fetch("/prompts.csv")
+  fetch(site_baseurl + "/prompts.csv")
     .then((response) => response.text())
     .then((csvText) => {
       const prompts = parseCSV(csvText);
