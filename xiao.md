@@ -94,3 +94,6 @@ Wiki pages you might want to explore:
     ```
 
 完成以上步骤后，你再次触发 CI/CD 流水线时，它就会使用你刚刚提交的、更新过的 `Gemfile.lock` 文件。这时，CI 环境中的 Bundler 版本将与锁文件中记录的版本一致，`frozen` 模式的检查就会通过，构建就能顺利进行了。
+
+
+-- xiao
