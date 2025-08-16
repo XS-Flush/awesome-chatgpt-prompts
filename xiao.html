@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>个人文档 — awesome AI prompts</title>
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>个人文档 | prompts.chat</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="个人文档" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This repo includes ChatGPT prompt curation to use ChatGPT and other LLM tools better." />
+<meta property="og:description" content="This repo includes ChatGPT prompt curation to use ChatGPT and other LLM tools better." />
+<meta property="og:site_name" content="prompts.chat" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="个人文档" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"This repo includes ChatGPT prompt curation to use ChatGPT and other LLM tools better.","headline":"个人文档","url":"/xiao.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css?v=7912d6878ed9af1716a02122c8dbd94c1e826d15">
+  </head>
+  <body class="">
+    <div class="layout-wrapper">
+      <!-- Copilot Suggestion Modal Backdrop -->
+      <div class="copilot-suggestion-backdrop"></div>
+      <!-- Copilot Suggestion Modal -->
+      <div class="copilot-suggestion-modal" id="copilotSuggestionModal">
+        <div class="copilot-suggestion-content">
+          GitHub Copilot may work better with developer mode. Would you like to switch to GitHub Copilot?
+        </div>
+        <div class="copilot-suggestion-actions">
+          <div class="copilot-suggestion-buttons">
+            <button class="copilot-suggestion-button secondary" onclick="hideCopilotSuggestion(false)">No, thanks</button>
+            <button class="copilot-suggestion-button primary" onclick="hideCopilotSuggestion(true)">Switch to GitHub Copilot</button>
+          </div>
+          <label class="copilot-suggestion-checkbox">
+            <input type="checkbox" id="doNotShowAgain">
+            Don't show again
+          </label>
+        </div>
+      </div>
+      <header class="site-header">
+        <div class="header-left">
+          <h1 class="site-title">个人文档</h1>
+          <p class="site-slogan">World's First & Most Famous Prompts Directory
+            
+            <a href="/vibe" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 hover:bg-green-200 transition-colors">
+              New: Try Vibe Coding Mode!
+            </a>
+            
+          </p>
+          
+          <div class="site-description">
+            <p class="platform-hint">Choose your AI platform</p>
+            <div class="platform-pills">
+              <button class="platform-tag" data-platform="github-copilot" data-url="https://github.com/copilot">GitHub Copilot</button>
+              <button class="platform-tag" data-platform="chatgpt" data-url="https://chat.openai.com">ChatGPT</button>
+              <div class="platform-tag-container">
+                <button class="platform-tag" data-platform="grok" data-url="https://grok.com/chat?reasoningMode=none">Grok</button>
+                <div class="grok-mode-dropdown" style="display: none;">
+                  <div class="grok-mode-option" data-url="https://grok.com/chat?reasoningMode=none">Grok</div>
+                  <div class="grok-mode-option" data-url="https://grok.com/chat?reasoningMode=deepsearch">Grok Deep Search</div>
+                  <div class="grok-mode-option" data-url="https://grok.com/chat?reasoningMode=think">Grok Thinking</div>
+                </div>
+              </div>
+              <button class="platform-tag" data-platform="claude" data-url="https://claude.ai/new">Claude</button>
+              <button class="platform-tag" data-platform="perplexity" data-url="https://perplexity.ai">Perplexity</button>
+              <button class="platform-tag" data-platform="mistral" data-url="https://chat.mistral.ai/chat">Mistral</button>
+              <button class="platform-tag" data-platform="gemini" data-url="https://gemini.google.com">Gemini</button>
+              <button class="platform-tag" data-platform="llama" data-url="https://meta.ai">Meta</button>
+            </div>
+          </div>
+          
+        </div>
+        <div class="header-right">
+          <a href="https://cursor.com" target="_blank" class="cursor-logo" title="Built with Cursor AI">
+            <svg height="1em" style="flex:none;line-height:1" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg">
+              <path d="M11.925 24l10.425-6-10.425-6L1.5 18l10.425 6z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M22.35 18V6L11.925 0v12l10.425 6z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M11.925 0L1.5 6v12l10.425-6V0z" fill="#10b981" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M22.35 6L11.925 24V12L22.35 6z" fill="#fff" class="cursor-logo-path dark-mode-path"></path>
+              <path d="M22.35 6l-10.425 6L1.5 6h20.85z" fill="#fff" class="cursor-logo-path dark-mode-path"></path>
+            </svg>
+            <span>vibecoded with cursor</span>
+          </a>
+          <a href="https://github.com/f/awesome-chatgpt-prompts/stargazers" target="_blank" class="star-count">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span id="starCount">...</span>
+          </a>
+          <a href="https://chromewebstore.google.com/detail/promptschat/eemdohkhbaifiocagjlhibfbhamlbeej" target="_blank" class="chrome-ext-link">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="4"></circle>
+              <line x1="21.17" y1="8" x2="12" y2="8"></line>
+              <line x1="3.95" y1="6.06" x2="8.54" y2="14"></line>
+              <line x1="10.88" y1="21.94" x2="15.46" y2="14"></line>
+            </svg>
+          </a>
+          <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">
+            <svg class="mode-icon sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="mode-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-wrapper">
+        <div class="sidebar">
+          <div class="search-container">
+            <div class="prompt-count" id="promptCount">
+              <span class="count-label">All Prompts</span>
+              <span class="prompts-count-label">Developer Prompts</span>
+              <span class="count-number">0</span>
+            </div>
+            <input type="text" id="searchInput" placeholder="Search prompts...">
+            <ul id="searchResults"></ul>
+          </div>
+        </div>
+        <div class="main-content">
+          
+          <div class="main-content-header">
+            <div class="header-content">
+              <div class="platform-selectors">
+                Reply in <select id="languageSelect" class="custom-select">
+                  <option value="English">English</option>
+                  <option value="Spanish">Spanish</option>
+                  <option value="French">French</option>
+                  <option value="German">German</option>
+                  <option value="Italian">Italian</option>
+                  <option value="Portuguese">Portuguese</option>
+                  <option value="Russian">Russian</option>
+                  <option value="Chinese">Chinese</option>
+                  <option value="Japanese">Japanese</option>
+                  <option value="Korean">Korean</option>
+                  <option value="Turkish">Turkish</option>
+                  <option value="custom">Custom...</option>
+                </select>
+                <input type="text" id="customLanguage" class="custom-input" placeholder="language..." style="display: none;">
+                using <select id="toneSelect" class="custom-select">
+                  <option value="professional">professional</option>
+                  <option value="casual">casual</option>
+                  <option value="friendly">friendly</option>
+                  <option value="formal">formal</option>
+                  <option value="technical">technical</option>
+                  <option value="creative">creative</option>
+                  <option value="enthusiastic">enthusiastic</option>
+                  <option value="humorous">humorous</option>
+                  <option value="authoritative">authoritative</option>
+                  <option value="empathetic">empathetic</option>
+                  <option value="analytical">analytical</option>
+                  <option value="conversational">conversational</option>
+                  <option value="academic">academic</option>
+                  <option value="persuasive">persuasive</option>
+                  <option value="inspirational">inspirational</option>
+                  <option value="custom">Custom...</option>
+                </select>
+                <input type="text" id="customTone" class="custom-input" placeholder="tone..." style="display: none;">
+                tone, for <select id="audienceSelect" class="custom-select">
+                  <option value="everyone">everyone</option>
+                  <option value="developers">developers</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="container-lg markdown-body">
+            <div id="promptContent">
+              <h1 id="个人文档">个人文档</h1>
+
+<p>根据您的问题，您想了解如何部署从 <code class="language-plaintext highlighter-rouge">f/awesome-chatgpt-prompts</code> 仓库拉取下来的代码。<cite></cite></p>
+
+<h2 id="部署方式">部署方式</h2>
+
+<p>这个项目使用 Jekyll 静态网站生成器，有两种主要的部署方式：</p>
+
+<h3 id="1-自动部署推荐">1. 自动部署（推荐）</h3>
+
+<p>项目已经配置了 GitHub Actions 自动部署流程 <a href="#0-0">1</a> 。当您推送代码到 <code class="language-plaintext highlighter-rouge">main</code> 分支时，会自动触发部署：</p>
+
+<ul>
+  <li>设置 Ruby 3.2 环境 <a href="#0-1">2</a></li>
+  <li>安装依赖并构建 Jekyll 网站 <a href="#0-2">3</a></li>
+  <li>自动部署到 GitHub Pages <a href="#0-3">4</a></li>
+</ul>
+
+<h3 id="2-本地部署">2. 本地部署</h3>
+
+<p>如果您想在本地运行和测试：</p>
+
+<ol>
+  <li><strong>安装 Ruby 3.2</strong> <a href="#0-4">5</a></li>
+  <li>
+    <p><strong>安装依赖</strong>：
+<code class="language-plaintext highlighter-rouge">bash
+gem update --system
+bundle update --bundler
+bundle install
+</code> <a href="#0-5">6</a></p>
+  </li>
+  <li><strong>构建并运行网站</strong>：
+<code class="language-plaintext highlighter-rouge">bash
+bundle exec jekyll build
+bundle exec jekyll serve
+</code> <a href="#0-6">7</a></li>
+</ol>
+
+<h2 id="网站架构">网站架构</h2>
+
+<p>该项目是一个 Jekyll 静态网站，主要组件包括：</p>
+<ul>
+  <li>布局模板 <code class="language-plaintext highlighter-rouge">_layouts/default.html</code> <a href="#0-7">8</a></li>
+  <li>JavaScript 交互逻辑 <code class="language-plaintext highlighter-rouge">script.js</code> <a href="#0-8">9</a></li>
+  <li>自动化的 CSV 验证和发布流程 <a href="#0-9">10</a></li>
+</ul>
+
+<h2 id="notes">Notes</h2>
+
+<p>这个项目的部署流程已经完全自动化，您只需要 fork 仓库并推送到 main 分支即可。GitHub Actions 会自动处理构建和部署到 GitHub Pages 的整个过程。如果您需要自定义域名或其他配置，可以参考 Jekyll 和 GitHub Pages 的相关文档。</p>
+
+<p>Wiki pages you might want to explore:</p>
+<ul>
+  <li><a href="/wiki/f/awesome-chatgpt-prompts#3.1">Website Architecture (f/awesome-chatgpt-prompts)</a></li>
+  <li><a href="/wiki/f/awesome-chatgpt-prompts#5">GitHub Automation (f/awesome-chatgpt-prompts)</a></li>
+</ul>
+
+<p>好的，这个问题很常见，我用中文为你解释一下。</p>
+
+<h3 id="问题总结">问题总结</h3>
+
+<p>你的 CI/CD（持续集成/持续部署）流水线构建失败，是因为<strong>CI 环境中的 Bundler 版本</strong>与你项目中 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件记录的 <strong>Bundler 版本不一致</strong>，并且构建过程运行在 <strong><code class="language-plaintext highlighter-rouge">frozen</code>（冻结）模式</strong>下。</p>
+
+<h3 id="详细解释">详细解释</h3>
+
+<ol>
+  <li>
+    <p><strong>RubyGems 和 Bundler 自动更新</strong>：从你提供的长长的更新日志可以看出，CI 环境中的 RubyGems 被更新到了一个新版本。近期的 RubyGems 更新会自动附带安装一个更新版本的 Bundler 作为默认 gem。</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 中的版本记录</strong>：你的项目根目录下有一个 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件。在这个文件的最底部，有一个 <code class="language-plaintext highlighter-rouge">BUNDLED WITH</code> 部分，它精确地记录了当初生成或最后一次更新这个锁文件时所使用的 Bundler 版本号。</p>
+  </li>
+  <li>
+    <p><strong><code class="language-plaintext highlighter-rouge">frozen</code> 模式的作用</strong>：在 CI/CD 或生产环境中，<code class="language-plaintext highlighter-rouge">bundle install</code> 命令通常会以 <code class="language-plaintext highlighter-rouge">--frozen</code> 或 <code class="language-plaintext highlighter-rouge">deployment</code> 模式运行。这是一个非常重要的安全措施，它会强制 Bundler 严格按照 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件中的记录来安装每一个 gem，<strong>不允许对 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件做任何修改</strong>。这保证了每次构建的环境都是完全一致和可预测的。</p>
+  </li>
+  <li>
+    <p><strong>冲突发生</strong>：</p>
+    <ul>
+      <li>CI 环境中的 Bundler 是一个<strong>新版本</strong>。</li>
+      <li>你的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件是用一个<strong>旧版本</strong>的 Bundler 创建的。</li>
+      <li>当新版本的 Bundler 运行时，它检测到这个版本差异，并试图更新 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件中的 <code class="language-plaintext highlighter-rouge">BUNDLED WITH</code> 版本号来与自己匹配。</li>
+      <li>然而，由于构建是在 <code class="language-plaintext highlighter-rouge">frozen</code> 模式下运行的，这个更新操作被禁止了。</li>
+      <li>于是，Bundler 抛出错误并终止了构建过程，错误码为 <code class="language-plaintext highlighter-rouge">16</code>。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="如何解决">如何解决</h3>
+
+<p>解决方案非常简单，正如错误信息提示的那样：<strong>在你的本地开发环境中更新 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code>，然后将改动提交到代码仓库。</strong></p>
+
+<p>请按照以下步骤操作：</p>
+
+<ol>
+  <li><strong>在你的本地电脑上</strong>，确保你的 Bundler 是最新版本（这是一个好习惯）：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem <span class="nb">install </span>bundler
+</code></pre></div>    </div>
+  </li>
+  <li><strong>更新锁文件</strong>：进入你的项目目录，运行以下命令。这个命令会专门更新 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 中记录的 Bundler 版本，而不会升级你项目依赖的其他 gem：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle update <span class="nt">--bundler</span>
+</code></pre></div>    </div>
+    <p>或者，有时简单地运行 <code class="language-plaintext highlighter-rouge">bundle install</code> 也能达到更新 <code class="language-plaintext highlighter-rouge">BUNDLED WITH</code> 版本的效果。</p>
+  </li>
+  <li><strong>提交变更</strong>：你会发现 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件已经被修改了。将这个修改后的文件添加到 Git 并提交。
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add Gemfile.lock
+git commit <span class="nt">-m</span> <span class="s2">"chore: Update Bundler version in lockfile"</span>
+git push
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>完成以上步骤后，你再次触发 CI/CD 流水线时，它就会使用你刚刚提交的、更新过的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件。这时，CI 环境中的 Bundler 版本将与锁文件中记录的版本一致，<code class="language-plaintext highlighter-rouge">frozen</code> 模式的检查就会通过，构建就能顺利进行了。</p>
+
+<p>好的，感谢你提供详细的日志和 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件。这个问题非常清晰。</p>
+
+<p>你本地的操作是<strong>完全正确的</strong>！</p>
+
+<p>你成功地将 RubyGems 和 Bundler 升级到了最新版本 (RubyGems 3.7.1, Bundler 2.7.1)，并且你的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件也已经被正确地更新了（最后一行 <code class="language-plaintext highlighter-rouge">BUNDLED WITH 2.7.1</code> 证明了这一点）。</p>
+
+<p><strong>但是，问题在于，这个更新后的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件很可能还没有被提交 (commit) 并推送 (push) 到你的代码仓库（比如 GitHub, GitLab 等）。</strong></p>
+
+<h3 id="问题根源">问题根源</h3>
+
+<p>CI/CD 流水线（比如 GitHub Actions）的工作原理是：每次运行时，它都会从你的代码仓库拉取最新的代码。</p>
+
+<ol>
+  <li>你在<strong>本地</strong>运行了 <code class="language-plaintext highlighter-rouge">bundle update --bundler</code>，成功更新了 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code>。</li>
+  <li>但是，你<strong>没有</strong>把这个修改后的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件推送到远程仓库。</li>
+  <li>当 CI 流水线开始运行时，它从远程仓库拉取的是<strong>旧的</strong> <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件。</li>
+  <li>在 CI 环境里，RubyGems 自动更新到了新版（就像日志里显示的那样），所以 Bundler 也是新版的 (2.7.1)。</li>
+  <li>新版的 Bundler 遇到了旧的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code>，发现版本不匹配，并且因为 <code class="language-plaintext highlighter-rouge">frozen</code> 模式无法修改它，于是再次报了同样的错误。</li>
+</ol>
+
+<p>CI 环境是无状态的，它不记得你本地做了什么操作。<strong>它只认代码仓库里的文件</strong>。</p>
+
+<h3 id="解决方案">解决方案</h3>
+
+<p>你只需要完成最后一步：将你的修改提交到代码仓库。</p>
+
+<p><strong>第一步：在你本地电脑上，确认 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 已修改</strong></p>
+
+<p>在你的项目根目录运行以下命令：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git status
+</code></pre></div></div>
+
+<p>你应该会看到类似下面的输出，表明 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件有改动：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add &lt;file&gt;..." to update what will be committed)
+  (use "git restore &lt;file&gt;..." to discard changes in working directory)
+        modified:   Gemfile.lock
+
+no changes added to commit (use "git add" and/or "git commit -a")
+</code></pre></div></div>
+
+<p><strong>第二步：提交并推送修改</strong></p>
+
+<p>运行以下命令将这个改动提交到你的仓库：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 将修改后的 Gemfile.lock 添加到暂存区</span>
+git add Gemfile.lock
+
+<span class="c"># 提交这个改动，附上清晰的说明</span>
+git commit <span class="nt">-m</span> <span class="s2">"chore: Update bundler version in Gemfile.lock"</span>
+
+<span class="c"># 将提交推送到远程仓库</span>
+git push
+</code></pre></div></div>
+
+<p><strong>第三步：重新运行 CI 流水线</strong></p>
+
+<p>推送完成后，你的 CI 流水线应该会自动重新运行（或者你可以手动触发它）。这一次，它会拉取到你刚刚提交的、包含了 <code class="language-plaintext highlighter-rouge">BUNDLED WITH 2.7.1</code> 的新 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件，构建就会顺利通过了。</p>
+
+<h3 id="如果问题依然存在">如果问题依然存在</h3>
+
+<p>我相信 99% 的可能性是第一种情况（忘记提交推送）。但如果推送后问题依然存在，请检查一下你的 CI/CD 配置中是否有<strong>缓存（Cache）机制</strong>。</p>
+
+<p>有时候 CI 会缓存 <code class="language-plaintext highlighter-rouge">vendor/bundle</code> 目录或者 gem 文件来加速构建。在这种情况下，你可能需要<strong>手动清除一下 CI 的缓存</strong>，然后再重新运行。例如，在 GitHub Actions 中，你可以在 Actions 标签页的管理界面找到清除缓存的选项。</p>
+
+<p>太好了！这是一个全新的、完全不同的错误，这说明你已经成功解决了之前 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件损坏的问题。我们离成功只有一步之遥了！</p>
+
+<p>这个新错误是一个非常经典的 <strong>“平台不匹配 (Platform Mismatch)”</strong> 问题。</p>
+
+<h3 id="问题诊断">问题诊断</h3>
+
+<p>我们来看一下错误日志的核心信息：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Your bundle only supports platforms ["x64-mingw-ucrt"] but your local platform
+is x86_64-linux. Add the current platform to the lockfile with
+`bundle lock --add-platform x86_64-linux` and try again.
+</code></pre></div></div>
+
+<ul>
+  <li><strong><code class="language-plaintext highlighter-rouge">Your bundle only supports platforms ["x64-mingw-ucrt"]</code></strong>: 这句话的意思是，你当前的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件里，<code class="language-plaintext highlighter-rouge">PLATFORMS</code> 区域只记录了一个平台：<code class="language-plaintext highlighter-rouge">x64-mingw-ucrt</code>。这是 <strong>Windows</strong> 平台的标识符。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">but your local platform is x86_64-linux</code></strong>: 但是，你的 CI/CD 环境（GitHub Actions 的服务器）是一个 <strong>Linux</strong> 系统，它的平台标识符是 <code class="language-plaintext highlighter-rouge">x86_64-linux</code>。</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">Add the current platform to the lockfile with ...</code></strong>: Bundler 非常友好地直接告诉了你解决方案。</li>
+</ul>
+
+<h3 id="根本原因">根本原因</h3>
+
+<p>这个错误发生的原因是：</p>
+
+<ol>
+  <li>你在你的 <strong>Windows 电脑</strong>上运行了 <code class="language-plaintext highlighter-rouge">bundle install</code> 或 <code class="language-plaintext highlighter-rouge">bundle update</code>。</li>
+  <li>Bundler 在生成 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 时，记录了你当前的操作系统平台 (Windows)。</li>
+  <li>当你把这个只记录了 Windows 平台的锁文件推送到 GitHub 后，CI 在一个 Linux 服务器上运行 <code class="language-plaintext highlighter-rouge">bundle install</code>。</li>
+  <li>Linux 上的 Bundler 检查 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code>，发现里面根本没有为 Linux 平台锁定任何 gem 版本，于是它出于安全考虑，拒绝继续执行，并提示你添加当前平台。</li>
+</ol>
+
+<p>这对于一些需要编译C扩展的 gem (比如你项目中的 <code class="language-plaintext highlighter-rouge">nokogiri</code> 和 <code class="language-plaintext highlighter-rouge">ffi</code>) 尤其重要，因为它们在不同操作系统上的版本或编译方式可能完全不同。</p>
+
+<h3 id="解决方案-1">解决方案</h3>
+
+<p>正如错误提示所说，你需要在你的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 中添加对 Linux 平台的支持。</p>
+
+<p><strong>请在你的本地 Windows 电脑上</strong>，打开终端，进入项目目录，然后执行以下操作。</p>
+
+<hr />
+
+<h4 id="方法一精确修复只添加-ci-需要的平台">方法一：精确修复（只添加 CI 需要的平台）</h4>
+
+<ol>
+  <li><strong>运行 Bundler 提供的命令</strong>：
+这个命令<strong>不会</strong>安装任何东西，它只是安全地更新你的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件，把 Linux 平台的信息加进去。
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle lock <span class="nt">--add-platform</span> x86_64-linux
+</code></pre></div>    </div>
+  </li>
+  <li><strong>检查 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code></strong>：
+执行完后，你可以打开 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件，滚动到最底部。你会看到 <code class="language-plaintext highlighter-rouge">PLATFORMS</code> 区域现在包含了两个平台：
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PLATFORMS
+  x64-mingw-ucrt
+  x86_64-linux
+</code></pre></div>    </div>
+  </li>
+  <li><strong>提交并推送修复</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add Gemfile.lock
+git commit <span class="nt">-m</span> <span class="s2">"feat: Add linux platform to lockfile for CI"</span>
+git push
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr />
+
+<h4 id="方法二更稳健的长期方案推荐">方法二：更稳健的长期方案（推荐）</h4>
+
+<p>如果你的团队里有 Mac 用户，或者你希望项目有更好的移植性，可以一次性把所有常见的平台都加上。</p>
+
+<ol>
+  <li><strong>逐一添加常见平台</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 添加标准 Linux (CI/CD 环境和大多数服务器)</span>
+bundle lock <span class="nt">--add-platform</span> x86_64-linux
+
+<span class="c"># 添加 Apple Silicon Mac (M1/M2/M3)</span>
+bundle lock <span class="nt">--add-platform</span> arm64-darwin
+
+<span class="c"># 添加 Intel Mac</span>
+bundle lock <span class="nt">--add-platform</span> x86_64-darwin
+</code></pre></div>    </div>
+    <p><em>（你的 Windows 平台 <code class="language-plaintext highlighter-rouge">x64-mingw-ucrt</code> 应该已经存在了）</em></p>
+  </li>
+  <li><strong>提交并推送</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add Gemfile.lock
+git commit <span class="nt">-m</span> <span class="s2">"build: Add support for Linux and macOS platforms"</span>
+git push
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>完成推送后，你的 GitHub Actions 就能顺利通过 <code class="language-plaintext highlighter-rouge">bundle install</code> 这一步了。这个错误就会彻底解决。</p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>About</h3>
+            <p>A curated collection of effective prompts for ChatGPT and other AI assistants, curated by <a href="https://x.com/fkadev">Fatih Kadir Akın</a>. While designed for ChatGPT, these prompts can be adapted for Claude, Gemini, Llama, and other language models to help you get more out of AI interactions.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Contributing</h3>
+            <p>If you'd like to contribute, please fork the repository and make changes as you'd like. Pull requests are warmly welcome. Please read the <a href="https://github.com/f/awesome-chatgpt-prompts/blob/main/CONTRIBUTING.md" style="color: var(--accent-color);">contribution guidelines</a> first.</p>
+          </div>
+          <div class="footer-section">
+            <h3>Links</h3>
+            <div class="book-links">
+              <a href="https://www.forbes.com/sites/tjmccue/2023/01/19/chatgpt-success-completely-depends-on-your-prompt/?sh=497a92a21a16" target="_blank" class="book-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                Featured on Forbes
+              </a>
+              <a href="https://github.com/f/awesome-chatgpt-prompts" target="_blank" class="book-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                GitHub Repository
+              </a>
+              <a href="https://huggingface.co/datasets/fka/awesome-chatgpt-prompts" target="_blank" class="book-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                  <line x1="7" y1="15" x2="7" y2="19"></line>
+                  <line x1="11" y1="15" x2="11" y2="19"></line>
+                  <line x1="15" y1="15" x2="15" y2="19"></line>
+                </svg>
+                Hugging Face Dataset
+              </a>
+              <a href="https://github.com/f/awesome-chatgpt-prompts/pulls" target="_blank" class="book-link">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                View Unmerged Prompts
+              </a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h3>e-Books by @f</h3>
+            <div class="book-links">
+              <a href="https://fka.gumroad.com/l/art-of-chatgpt-prompting" class="book-link" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                The Art of ChatGPT Prompting
+              </a>
+              <a href="https://fka.gumroad.com/l/how-to-make-money-with-chatgpt" class="book-link" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                How to Make Money with ChatGPT
+              </a>
+              <a href="https://fka.gumroad.com/l/the-art-of-midjourney-ai-guide-to-creating-images-from-text" class="book-link" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                The Art of Midjourney AI
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <script src="script.js"></script>
+    
+    <script>
+      // Initialize audience selector
+      const audienceSelect = document.getElementById('audienceSelect');
+      
+      // Handle Grok platform selection
+      document.addEventListener('DOMContentLoaded', () => {
+        const grokButton = document.querySelector('[data-platform="grok"]');
+        const grokDropdown = document.querySelector('.grok-mode-dropdown');
+        const grokOptions = document.querySelectorAll('.grok-mode-option');
+        let isGrokDropdownVisible = false;
+
+        // Add event listeners for all platform buttons
+        const platformButtons = document.querySelectorAll('.platform-tag');
+        platformButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const platform = button.getAttribute('data-platform');
+            // If platform is not github-copilot, set audience to "everyone"
+            if (platform !== 'github-copilot') {
+              audienceSelect.value = 'everyone';
+              document.body.classList.remove('dev-mode');
+              // Trigger filtering if needed
+              if (typeof filterPrompts === 'function') {
+                filterPrompts();
+              }
+            }
+          });
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.platform-tag-container')) {
+            grokDropdown.style.display = 'none';
+            isGrokDropdownVisible = false;
+          }
+        });
+
+        // Toggle dropdown
+        grokButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          isGrokDropdownVisible = !isGrokDropdownVisible;
+          grokDropdown.style.display = isGrokDropdownVisible ? 'block' : 'none';
+        });
+
+        // Handle option selection
+        grokOptions.forEach(option => {
+          option.addEventListener('click', (e) => {
+            const selectedUrl = option.dataset.url;
+            const selectedText = option.textContent;
+            grokButton.dataset.url = selectedUrl;
+            grokButton.textContent = selectedText;
+            grokDropdown.style.display = 'none';
+            isGrokDropdownVisible = false;
+            
+            // Also set audience to "everyone" for Grok options
+            audienceSelect.value = 'everyone';
+            document.body.classList.remove('dev-mode');
+            // Trigger filtering if needed
+            if (typeof filterPrompts === 'function') {
+              filterPrompts();
+            }
+          });
+        });
+      });
+      
+      // Set initial state based on URL params or default
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialAudience = urlParams.get('audience') || 'everyone';
+      audienceSelect.value = initialAudience;
+      document.body.classList.toggle('dev-mode', initialAudience === 'developers');
+      
+      // Handle audience changes
+      audienceSelect.addEventListener('change', (e) => {
+        const isDevMode = e.target.value === 'developers';
+        document.body.classList.toggle('dev-mode', isDevMode);
+        
+        // Trigger prompt filtering
+        filterPrompts();
+      });
+    </script>
+    
+    <style>
+      video { max-width: 100% !important; }
+      
+      /* Embed button styling */
+      .modal-embed-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-right: 8px;
+      }
+      
+      .modal-embed-button:hover {
+        background-color: var(--accent-color-hover);
+        transform: translateY(-1px);
+      }
+      
+      .modal-embed-button svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+      
+      /* Responsive adjustments for modal buttons */
+      @media (max-width: 640px) {
+        .modal-footer-right {
+          flex-direction: column-reverse;
+          gap: 8px;
+        }
+        
+        .modal-embed-button {
+          margin-right: 0;
+          margin-bottom: 0;
+          width: 100%;
+          justify-content: center;
+        }
+        
+        .modal-chat-button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MSNHFWTE77"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-MSNHFWTE77');
+    </script>
+  </body>
+</html>
