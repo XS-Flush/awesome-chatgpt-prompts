@@ -96,4 +96,73 @@ Wiki pages you might want to explore:
 完成以上步骤后，你再次触发 CI/CD 流水线时，它就会使用你刚刚提交的、更新过的 `Gemfile.lock` 文件。这时，CI 环境中的 Bundler 版本将与锁文件中记录的版本一致，`frozen` 模式的检查就会通过，构建就能顺利进行了。
 
 
--- xiao
+好的，感谢你提供详细的日志和 `Gemfile.lock` 文件。这个问题非常清晰。
+
+你本地的操作是**完全正确的**！
+
+你成功地将 RubyGems 和 Bundler 升级到了最新版本 (RubyGems 3.7.1, Bundler 2.7.1)，并且你的 `Gemfile.lock` 文件也已经被正确地更新了（最后一行 `BUNDLED WITH 2.7.1` 证明了这一点）。
+
+**但是，问题在于，这个更新后的 `Gemfile.lock` 文件很可能还没有被提交 (commit) 并推送 (push) 到你的代码仓库（比如 GitHub, GitLab 等）。**
+
+### 问题根源
+
+CI/CD 流水线（比如 GitHub Actions）的工作原理是：每次运行时，它都会从你的代码仓库拉取最新的代码。
+
+1.  你在**本地**运行了 `bundle update --bundler`，成功更新了 `Gemfile.lock`。
+2.  但是，你**没有**把这个修改后的 `Gemfile.lock` 文件推送到远程仓库。
+3.  当 CI 流水线开始运行时，它从远程仓库拉取的是**旧的** `Gemfile.lock` 文件。
+4.  在 CI 环境里，RubyGems 自动更新到了新版（就像日志里显示的那样），所以 Bundler 也是新版的 (2.7.1)。
+5.  新版的 Bundler 遇到了旧的 `Gemfile.lock`，发现版本不匹配，并且因为 `frozen` 模式无法修改它，于是再次报了同样的错误。
+
+CI 环境是无状态的，它不记得你本地做了什么操作。**它只认代码仓库里的文件**。
+
+### 解决方案
+
+你只需要完成最后一步：将你的修改提交到代码仓库。
+
+**第一步：在你本地电脑上，确认 `Gemfile.lock` 已修改**
+
+在你的项目根目录运行以下命令：
+
+```bash
+git status
+```
+
+你应该会看到类似下面的输出，表明 `Gemfile.lock` 文件有改动：
+
+```
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   Gemfile.lock
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+**第二步：提交并推送修改**
+
+运行以下命令将这个改动提交到你的仓库：
+
+```bash
+# 将修改后的 Gemfile.lock 添加到暂存区
+git add Gemfile.lock
+
+# 提交这个改动，附上清晰的说明
+git commit -m "chore: Update bundler version in Gemfile.lock"
+
+# 将提交推送到远程仓库
+git push
+```
+
+**第三步：重新运行 CI 流水线**
+
+推送完成后，你的 CI 流水线应该会自动重新运行（或者你可以手动触发它）。这一次，它会拉取到你刚刚提交的、包含了 `BUNDLED WITH 2.7.1` 的新 `Gemfile.lock` 文件，构建就会顺利通过了。
+
+### 如果问题依然存在
+
+我相信 99% 的可能性是第一种情况（忘记提交推送）。但如果推送后问题依然存在，请检查一下你的 CI/CD 配置中是否有**缓存（Cache）机制**。
+
+有时候 CI 会缓存 `vendor/bundle` 目录或者 gem 文件来加速构建。在这种情况下，你可能需要**手动清除一下 CI 的缓存**，然后再重新运行。例如，在 GitHub Actions 中，你可以在 Actions 标签页的管理界面找到清除缓存的选项。
