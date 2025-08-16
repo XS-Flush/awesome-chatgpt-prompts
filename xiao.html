@@ -23,8 +23,20 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css?v=5cfa46be1d2ddd003a5bb65491b1c7f34896dab5">
+    <link rel="stylesheet" href="/style.css?v=d48bc0953ac53bb9a4542f34e104f89a7d8d089a">
   </head>
+  <!-- ================================================================= -->
+    <!-- START: MODIFICATION 1 -->
+    <!--  将 baseurl 定义为全局 JavaScript 变量 -->
+    <!--  这个脚本必须放在所有引用自定义JS文件（如 script.js）之前 -->
+    <script>
+      var site_baseurl = "";
+    </script>
+    <!-- END: MODIFICATION 1 -->
+    <!-- ================================================================= -->
+    
+
+
   <body class="">
     <div class="layout-wrapper">
       <!-- Copilot Suggestion Modal Backdrop -->
@@ -655,7 +667,7 @@ git push
         </div>
       </footer>
     </div>
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
     
     <script>
       // Initialize audience selector
