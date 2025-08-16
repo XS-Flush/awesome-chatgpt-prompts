@@ -11,6 +11,18 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ "/style.css?v=" | append: site.github.build_revision | relative_url }}">
   </head>
+  <!-- ================================================================= -->
+    <!-- START: MODIFICATION 1 -->
+    <!--  将 baseurl 定义为全局 JavaScript 变量 -->
+    <!--  这个脚本必须放在所有引用自定义JS文件（如 script.js）之前 -->
+    <script>
+      var site_baseurl = "{{ site.baseurl }}";
+    </script>
+    <!-- END: MODIFICATION 1 -->
+    <!-- ================================================================= -->
+    
+
+
   <body class="{{ page.body_class | default: '' }}">
     <div class="layout-wrapper">
       <!-- Copilot Suggestion Modal Backdrop -->
@@ -227,7 +239,7 @@
         </div>
       </footer>
     </div>
-    <script src="script.js"></script>
+    <script src="{{ "/script.js" | relative_url }}"></script>
     {% if page.hide_tone_selector != true %}
     <script>
       // Initialize audience selector
