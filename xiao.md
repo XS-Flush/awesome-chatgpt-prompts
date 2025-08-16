@@ -255,3 +255,129 @@ is x86_64-linux. Add the current platform to the lockfile with
     ```
 
 完成推送后，你的 GitHub Actions 就能顺利通过 `bundle install` 这一步了。这个错误就会彻底解决。
+
+
+好的，看到了你的 GitHub Actions 配置文件，**我们终于找到了问题的根源！**
+
+你的 CI 脚本中有两个步骤正在**主动地破坏**你之前所有的修复工作。这完美地解释了为什么问题会反复出现。
+
+让我们看一下有问题的部分：
+
+```yaml
+      - name: Update Bundler
+        run: |
+          gem update --system
+          bundle update --bundler
+
+      - name: Install dependencies
+        run: |
+          rm -f Gemfile.lock # Remove existing lockfile
+          bundle install
+```
+
+### 问题分析
+
+1.  **`Update Bundler` 步骤**:
+    *   `gem update --system`: 这一行会把 CI 环境中的 RubyGems 和 Bundler 升级到**最新版**。这本身就可能导致和你本地不一致，是我们一直试图避免的不确定性来源。
+    *   `bundle update --bundler`: 这一行会尝试根据新环境更新 `Gemfile.lock`，但由于 `frozen` 模式，它会失败并报错。
+
+2.  **`Install dependencies` 步骤 (这是最关键的错误！)**:
+    *   `rm -f Gemfile.lock`: **这一行命令会直接删除掉你从代码仓库中拉取下来的 `Gemfile.lock` 文件！**
+    *   这意味着你本地做的所有修复——无论是修正 `BUNDLED WITH` 版本，还是添加平台——**全都被 CI 环境给扔掉了**。
+    *   `bundle install`: 在没有 `Gemfile.lock` 的情况下运行此命令，Bundler 会读取你的 `Gemfile`，然后去网上查找所有依赖的最新版本，并**在 CI 环境中临时生成一个全新的 `Gemfile.lock`**。这完全违背了使用锁文件来保证构建一致性的初衷。
+
+### 正确的解决方案
+
+现代的 `ruby/setup-ruby@v1` action 已经非常智能了。当你使用 `bundler-cache: true` 选项时，它会自动帮你完成所有正确的事情：
+
+*   它会读取你的 `Gemfile.lock` 文件。
+*   它会根据锁文件安装正确的 gem 版本。
+*   它会自动为你缓存这些 gem，让后续的构建更快。
+*   它会尊重你代码库中的 `Gemfile.lock`，**绝不会**删除或修改它。
+
+因此，你只需要**删除掉所有多余和错误的步骤**，完全信任 `setup-ruby` action 即可。
+
+---
+
+### 修改后的代码
+
+这是你的 `your-workflow.yml` 文件修改后的**最终版本**。请直接用下面的内容替换你原来的文件。
+
+```yaml
+name: Publish to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # 建议更新到 v4
+
+      - name: Set up Ruby and install dependencies
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true # 这一行会自动运行 'bundle install' 并缓存依赖
+
+      - name: Build site
+        run: bundle exec jekyll build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4 # 建议更新到 v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+```
+
+### 修改要点总结
+
+1.  我将 `actions/checkout` 和 `actions-gh-pages` 的版本更新到了最新的 `v4`，这是一个好习惯。
+2.  我将 `Set up Ruby` 步骤的名字改为了 `Set up Ruby and install dependencies`，以更准确地反映 `bundler-cache: true` 的作用。
+3.  **最重要的一点：我删除了整个 `Update Bundler` 和 `Install dependencies` 步骤。** 它们是所有问题的根源，并且 `setup-ruby` 已经优雅地处理了这些工作。
+
+### 最终操作步骤
+
+现在，请完成以下**最后两件事**：
+
+1.  **在你的本地电脑上**，确保你的 `Gemfile.lock` 是干净且正确的（如果不确定，可以按照我上一个回答里的“最终解决方案”重新生成一遍）。
+2.  **修改你的 workflow 文件**，用上面提供的最新代码替换掉你原来的 `.github/workflows/your-workflow.yml` 文件的内容。
+3.  **提交并推送这两个文件的改动**：
+    ```bash
+    git add Gemfile.lock .github/workflows/your-workflow.yml
+    git commit -m "fix(ci): Simplify workflow and respect Gemfile.lock"
+    git push
+    ```
+
+完成之后，你的构建**一定会成功**。
+
+
+太棒了！非常为你高兴，我们终于找到了问题的症结所在！
+
+是的，你完全说对了，**根本原因就出在那个 CI 脚本上**。
+
+这是一个非常经典的 CI/CD 调试案例。你本地的所有操作都是正确的，但 CI 脚本中的错误指令让所有的努力都付诸东流了。
+
+### 让我们回顾一下整个过程：
+
+1.  **最初的问题**：`frozen mode` 错误，因为 CI 环境的 Bundler 版本比 `Gemfile.lock` 文件中的新。
+2.  **你的修复**：你在本地更新了 `Gemfile.lock`，但问题依旧。
+3.  **中间的波折**：我们排查了 `Gemfile.lock` 文件损坏、平台缺失等问题，并一一修复。
+4.  **根本原因的暴露**：尽管你本地的 `Gemfile.lock` 已经完美无缺，但 CI 脚本中的 `rm -f Gemfile.lock` 命令**直接把它删除了**，导致 CI 环境完全无视了你的修复，从零开始尝试安装依赖，从而回到了最初的错误。
+
+### 核心教训
+
+这个经历带来的最大收获就是：
+
+> **CI/CD 的目标是精确地复制一个已知的、可工作的环境，而不是创建一个新的环境。**
+
+你的 `Gemfile.lock` 文件就是这个“已知环境”的蓝图。CI 脚本**必须**尊重它，而不是忽略或销毁它。现代的工具（如 `ruby/setup-ruby` 的 `bundler-cache: true` 功能）就是为了这个目的而设计的，它们能以最高效、最正确的方式来使用这个蓝图。
+
+再次祝贺你解决了这个棘手的问题！现在你的自动化部署流程不仅能正常工作，而且变得更加健壮、可靠和高效了。
+
+如果以后还有其他问题，随时可以再来问我！

@@ -23,7 +23,7 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/style.css?v=7912d6878ed9af1716a02122c8dbd94c1e826d15">
+    <link rel="stylesheet" href="/style.css?v=5cfa46be1d2ddd003a5bb65491b1c7f34896dab5">
   </head>
   <body class="">
     <div class="layout-wrapper">
@@ -447,6 +447,145 @@ git push
 </ol>
 
 <p>完成推送后，你的 GitHub Actions 就能顺利通过 <code class="language-plaintext highlighter-rouge">bundle install</code> 这一步了。这个错误就会彻底解决。</p>
+
+<p>好的，看到了你的 GitHub Actions 配置文件，<strong>我们终于找到了问题的根源！</strong></p>
+
+<p>你的 CI 脚本中有两个步骤正在<strong>主动地破坏</strong>你之前所有的修复工作。这完美地解释了为什么问题会反复出现。</p>
+
+<p>让我们看一下有问题的部分：</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Update Bundler</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">gem update --system</span>
+          <span class="s">bundle update --bundler</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install dependencies</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">rm -f Gemfile.lock # Remove existing lockfile</span>
+          <span class="s">bundle install</span>
+</code></pre></div></div>
+
+<h3 id="问题分析">问题分析</h3>
+
+<ol>
+  <li><strong><code class="language-plaintext highlighter-rouge">Update Bundler</code> 步骤</strong>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">gem update --system</code>: 这一行会把 CI 环境中的 RubyGems 和 Bundler 升级到<strong>最新版</strong>。这本身就可能导致和你本地不一致，是我们一直试图避免的不确定性来源。</li>
+      <li><code class="language-plaintext highlighter-rouge">bundle update --bundler</code>: 这一行会尝试根据新环境更新 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code>，但由于 <code class="language-plaintext highlighter-rouge">frozen</code> 模式，它会失败并报错。</li>
+    </ul>
+  </li>
+  <li><strong><code class="language-plaintext highlighter-rouge">Install dependencies</code> 步骤 (这是最关键的错误！)</strong>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">rm -f Gemfile.lock</code>: <strong>这一行命令会直接删除掉你从代码仓库中拉取下来的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件！</strong></li>
+      <li>这意味着你本地做的所有修复——无论是修正 <code class="language-plaintext highlighter-rouge">BUNDLED WITH</code> 版本，还是添加平台——<strong>全都被 CI 环境给扔掉了</strong>。</li>
+      <li><code class="language-plaintext highlighter-rouge">bundle install</code>: 在没有 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 的情况下运行此命令，Bundler 会读取你的 <code class="language-plaintext highlighter-rouge">Gemfile</code>，然后去网上查找所有依赖的最新版本，并<strong>在 CI 环境中临时生成一个全新的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code></strong>。这完全违背了使用锁文件来保证构建一致性的初衷。</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="正确的解决方案">正确的解决方案</h3>
+
+<p>现代的 <code class="language-plaintext highlighter-rouge">ruby/setup-ruby@v1</code> action 已经非常智能了。当你使用 <code class="language-plaintext highlighter-rouge">bundler-cache: true</code> 选项时，它会自动帮你完成所有正确的事情：</p>
+
+<ul>
+  <li>它会读取你的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件。</li>
+  <li>它会根据锁文件安装正确的 gem 版本。</li>
+  <li>它会自动为你缓存这些 gem，让后续的构建更快。</li>
+  <li>它会尊重你代码库中的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code>，<strong>绝不会</strong>删除或修改它。</li>
+</ul>
+
+<p>因此，你只需要<strong>删除掉所有多余和错误的步骤</strong>，完全信任 <code class="language-plaintext highlighter-rouge">setup-ruby</code> action 即可。</p>
+
+<hr />
+
+<h3 id="修改后的代码">修改后的代码</h3>
+
+<p>这是你的 <code class="language-plaintext highlighter-rouge">your-workflow.yml</code> 文件修改后的<strong>最终版本</strong>。请直接用下面的内容替换你原来的文件。</p>
+
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Publish to GitHub Pages</span>
+
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">push</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">main</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">build</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout repository</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v4</span> <span class="c1"># 建议更新到 v4</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set up Ruby and install dependencies</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">ruby/setup-ruby@v1</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">ruby-version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.2"</span>
+          <span class="na">bundler-cache</span><span class="pi">:</span> <span class="no">true</span> <span class="c1"># 这一行会自动运行 'bundle install' 并缓存依赖</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Build site</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="s">bundle exec jekyll build</span>
+
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Deploy to GitHub Pages</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">peaceiris/actions-gh-pages@v4</span> <span class="c1"># 建议更新到 v4</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">github_token</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="na">publish_dir</span><span class="pi">:</span> <span class="s">./_site</span>
+</code></pre></div></div>
+
+<h3 id="修改要点总结">修改要点总结</h3>
+
+<ol>
+  <li>我将 <code class="language-plaintext highlighter-rouge">actions/checkout</code> 和 <code class="language-plaintext highlighter-rouge">actions-gh-pages</code> 的版本更新到了最新的 <code class="language-plaintext highlighter-rouge">v4</code>，这是一个好习惯。</li>
+  <li>我将 <code class="language-plaintext highlighter-rouge">Set up Ruby</code> 步骤的名字改为了 <code class="language-plaintext highlighter-rouge">Set up Ruby and install dependencies</code>，以更准确地反映 <code class="language-plaintext highlighter-rouge">bundler-cache: true</code> 的作用。</li>
+  <li><strong>最重要的一点：我删除了整个 <code class="language-plaintext highlighter-rouge">Update Bundler</code> 和 <code class="language-plaintext highlighter-rouge">Install dependencies</code> 步骤。</strong> 它们是所有问题的根源，并且 <code class="language-plaintext highlighter-rouge">setup-ruby</code> 已经优雅地处理了这些工作。</li>
+</ol>
+
+<h3 id="最终操作步骤">最终操作步骤</h3>
+
+<p>现在，请完成以下<strong>最后两件事</strong>：</p>
+
+<ol>
+  <li><strong>在你的本地电脑上</strong>，确保你的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 是干净且正确的（如果不确定，可以按照我上一个回答里的“最终解决方案”重新生成一遍）。</li>
+  <li><strong>修改你的 workflow 文件</strong>，用上面提供的最新代码替换掉你原来的 <code class="language-plaintext highlighter-rouge">.github/workflows/your-workflow.yml</code> 文件的内容。</li>
+  <li><strong>提交并推送这两个文件的改动</strong>：
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git add Gemfile.lock .github/workflows/your-workflow.yml
+git commit <span class="nt">-m</span> <span class="s2">"fix(ci): Simplify workflow and respect Gemfile.lock"</span>
+git push
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>完成之后，你的构建<strong>一定会成功</strong>。</p>
+
+<p>太棒了！非常为你高兴，我们终于找到了问题的症结所在！</p>
+
+<p>是的，你完全说对了，<strong>根本原因就出在那个 CI 脚本上</strong>。</p>
+
+<p>这是一个非常经典的 CI/CD 调试案例。你本地的所有操作都是正确的，但 CI 脚本中的错误指令让所有的努力都付诸东流了。</p>
+
+<h3 id="让我们回顾一下整个过程">让我们回顾一下整个过程：</h3>
+
+<ol>
+  <li><strong>最初的问题</strong>：<code class="language-plaintext highlighter-rouge">frozen mode</code> 错误，因为 CI 环境的 Bundler 版本比 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件中的新。</li>
+  <li><strong>你的修复</strong>：你在本地更新了 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code>，但问题依旧。</li>
+  <li><strong>中间的波折</strong>：我们排查了 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件损坏、平台缺失等问题，并一一修复。</li>
+  <li><strong>根本原因的暴露</strong>：尽管你本地的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 已经完美无缺，但 CI 脚本中的 <code class="language-plaintext highlighter-rouge">rm -f Gemfile.lock</code> 命令<strong>直接把它删除了</strong>，导致 CI 环境完全无视了你的修复，从零开始尝试安装依赖，从而回到了最初的错误。</li>
+</ol>
+
+<h3 id="核心教训">核心教训</h3>
+
+<p>这个经历带来的最大收获就是：</p>
+
+<blockquote>
+  <p><strong>CI/CD 的目标是精确地复制一个已知的、可工作的环境，而不是创建一个新的环境。</strong></p>
+</blockquote>
+
+<p>你的 <code class="language-plaintext highlighter-rouge">Gemfile.lock</code> 文件就是这个“已知环境”的蓝图。CI 脚本<strong>必须</strong>尊重它，而不是忽略或销毁它。现代的工具（如 <code class="language-plaintext highlighter-rouge">ruby/setup-ruby</code> 的 <code class="language-plaintext highlighter-rouge">bundler-cache: true</code> 功能）就是为了这个目的而设计的，它们能以最高效、最正确的方式来使用这个蓝图。</p>
+
+<p>再次祝贺你解决了这个棘手的问题！现在你的自动化部署流程不仅能正常工作，而且变得更加健壮、可靠和高效了。</p>
+
+<p>如果以后还有其他问题，随时可以再来问我！</p>
 
             </div>
           </div>
