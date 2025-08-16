@@ -11,23 +11,23 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # 建议更新到 v4
 
-      - name: Set up Ruby
+      - name: Set up Ruby and install dependencies
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.2"
           bundler-cache: true # This will cache dependencies
 
-      - name: Update Bundler
-        run: |
-          gem update --system
-          bundle update --bundler
+      # - name: Update Bundler
+      #   run: |
+      #     gem update --system
+      #     bundle update --bundler
 
-      - name: Install dependencies
-        run: |
-          rm -f Gemfile.lock # Remove existing lockfile
-          bundle install
+      # - name: Install dependencies
+      #   run: |
+      #     rm -f Gemfile.lock # Remove existing lockfile
+      #     bundle install
 
       - name: Build site
         run: bundle exec jekyll build
